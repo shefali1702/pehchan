@@ -105,6 +105,10 @@
 .es-frame.is-on {
   opacity: 1;
 }
+/* The photo is the light in the room: a faint warm spill around it. */
+.es-evening .es-frame.is-on {
+  box-shadow: 0 0 160px 40px rgba(232, 163, 61, 0.07);
+}
 .es-pan {
   position: absolute;
   inset: 0;
@@ -196,6 +200,7 @@
   right: 0;
   bottom: 0;
   background: var(--band);
+  border-top: 1px solid rgba(232, 163, 61, 0.18);
   padding: 22px 260px 0 48px;
   display: flex;
   flex-direction: column;

@@ -1018,3 +1018,20 @@ body:has(.cg) {
   height: 36px;
   margin-top: 8px;
 }
+
+.fa-greet {
+  margin: 2px 0 18px;
+}
+.fa-greet-hi {
+  font-family: var(--serif);
+  font-size: 30px;
+  line-height: 1.1;
+  margin: 0;
+}
+.fa-greet-hi .fa-deva {
+  font-size: 30px;
+}
+.fa-greet-line {
+  margin: 4px 0 0;
+  color: var(--ink-soft);
+}

@@ -83,3 +83,8 @@ button {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+::selection {
+  background: var(--marigold);
+  color: var(--kohl);
+}

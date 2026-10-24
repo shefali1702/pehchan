@@ -12,6 +12,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <FilmNav />
       <main className="site">{children}</main>
       <Footer />
+      <div className="grain" aria-hidden="true" />
     </>
   );
 }

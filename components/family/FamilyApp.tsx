@@ -127,6 +127,7 @@ export default function FamilyApp() {
       )}
 
       <main className="fa-main">
+        {tab === "add" && <Greeting data={data} me={person} />}
         {tab === "add" && <AddPhoto data={data} me={shown} onSaved={reload} />}
         {tab === "record" && <Record data={data} me={shown} onSaved={reload} />}
         {tab === "inbox" && <Inbox list={inbox} onOpen={() => setFresh(null)} />}
@@ -148,6 +149,27 @@ export default function FamilyApp() {
           </button>
         ))}
       </nav>
+    </div>
+  );
+}
+
+function Greeting({ data, me }: { data: FamilyData; me: Person }) {
+  const photos = data.photos.filter((p) => p.uploadedBy === me.id && !p.placeholder).length;
+  const voices = data.voiceLetters.filter((v) => v.speakerId === me.id).length;
+  const elder = data.people.find((p) => p.id === data.elderId);
+  const who = me.callsElder || elder?.name;
+  const parts = [
+    photos ? `${photos} ${photos === 1 ? "photo" : "photos"}` : "",
+    voices ? `${voices} ${voices === 1 ? "recording" : "recordings"}` : "",
+  ].filter(Boolean);
+  return (
+    <div className="fa-greet">
+      <p className="fa-greet-hi">
+        <span className="fa-deva">नमस्ते</span> {me.name}
+      </p>
+      <p className="fa-greet-line">
+        {parts.length ? `${parts.join(" and ")} of yours are in ${who}'s reel.` : `Add a photo and it joins ${who}'s next reel.`}
+      </p>
     </div>
   );
 }
