@@ -17,8 +17,23 @@ Open http://localhost:3000. The dev server listens on your network too, so phone
 | `/screen` | Kamla (the elder) | Tablet, TV or projector, landscape |
 | `/family` | Riya, Arjun, Meera | Phone |
 | `/care` | Meera, the caregiver at home | Phone or tablet |
+| `/consent` | Kamla, with family beside her | Laptop or tablet |
+| `/care/summary` | Her doctor | Print or PDF |
 
-`/screen?theme=evening` or `?theme=morning` forces a theme. Otherwise it follows the clock (evening from 17:00).
+`/screen?theme=evening` or `?theme=morning` forces a theme. Otherwise it follows the clock, from the hour set on the caregiver page (17:00 by default).
+
+The caregiver page switches her reel between three modes: **Tell** (she talks over her photos and whoever added the photo can hear it), **Remember** (the reel with the recognition game) and **Comfort** (nothing to tap, slower). Relatives can record "Evening words" that open her evening reel.
+
+## Offline at the venue
+
+The offline cache only runs in a production build:
+
+```bash
+npm run build
+npm start
+```
+
+Open `/screen` once while online. After that its photos, voices and last reel are served from the cache if the Wi-Fi drops. This was not verified in a real browser yet; check it in Chrome by turning Wi-Fi off and reloading `/screen`.
 
 ## Before the demo
 
@@ -48,4 +63,4 @@ Copy `.env.example` to `.env.local`.
 
 ## Not done yet
 
-Evening calm voice line, Comfort and Tell modes, living consent recording, TV layout, offline caching of the reel, and the launch checklist (custom domain, privacy policy, terms).
+Read-aloud and voice control on her screen, WhatsApp contributions, Supabase in place of the local store, a test with an older relative, and the launch checklist (custom domain, privacy policy, terms).
