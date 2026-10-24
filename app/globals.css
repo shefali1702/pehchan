@@ -88,3 +88,18 @@ button {
   background: var(--marigold);
   color: var(--kohl);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Her photos still cross-fade: a fade is calm, a jump cut is not. */
+  .es-frame {
+    transition-duration: 1500ms !important;
+  }
+}

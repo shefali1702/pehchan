@@ -41,6 +41,10 @@ export default function ElderScreen() {
       });
     setNow(new Date());
     preview.current = new URLSearchParams(location.search).has("preview");
+    // Offline cache for the venue. Off in development so hot reload stays honest.
+    if (process.env.NODE_ENV === "production" && !preview.current && "serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
     if (preview.current) setTimeout(() => beginRef.current(), 900);
     const t = setInterval(() => setNow(new Date()), 60000);
     return () => clearInterval(t);
@@ -60,11 +64,33 @@ export default function ElderScreen() {
         wake.current = await navigator.wakeLock?.request("screen");
       } catch {}
     }
-    const r: Reel = await fetch("/api/reel/build", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ evening: theme === "evening" }),
-    }).then((x) => x.json());
+    let r: Reel;
+    try {
+      r = await fetch("/api/reel/build", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ evening: theme === "evening" }),
+      }).then((x) => x.json());
+      try {
+        localStorage.setItem("pehchan-last-reel", JSON.stringify(r));
+      } catch {}
+    } catch {
+      // No network: play the last reel this screen received.
+      const saved = (() => {
+        try {
+          return localStorage.getItem("pehchan-last-reel");
+        } catch {
+          return null;
+        }
+      })();
+      if (!saved) return;
+      r = JSON.parse(saved);
+    }
+    // Warm the offline cache with every voice in this reel.
+    for (const it of r.items) {
+      const v = it.type === "photo" || it.type === "orient" ? it.voice?.src : it.type === "game" ? it.hello : null;
+      if (v) fetch(v).catch(() => {});
+    }
     // Preload images so the cross-fades never stutter.
     const s: Record<string, Size> = {};
     await Promise.all(
@@ -87,12 +113,14 @@ export default function ElderScreen() {
     setPhase("reel");
     m.startMusic(r.song?.src);
     if (preview.current) return;
-    const sess = await fetch("/api/session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "start", reel: r }),
-    }).then((x) => x.json());
-    session.current = sess.id;
+    try {
+      const sess = await fetch("/api/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "start", reel: r }),
+      }).then((x) => x.json());
+      session.current = sess.id;
+    } catch {}
   };
 
   const beginRef = useRef(begin);
@@ -238,8 +266,9 @@ function Stage({
   const [voiceOn, setVoiceOn] = useState(false);
   const [step, setStep] = useState(0);
   const answered = useRef(false);
-  const top = vp.h < 700 ? 84 : 110;
-  const bottom = vp.h < 700 ? 190 : 250;
+  const tv = vp.w >= 1600;
+  const top = tv ? 150 : vp.h < 700 ? 84 : 110;
+  const bottom = tv ? 330 : vp.h < 700 ? 190 : 250;
 
   // Photo items: caption, voice letter, then hold.
   useEffect(() => {

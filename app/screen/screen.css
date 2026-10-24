@@ -358,3 +358,52 @@
     box-shadow: 0 0 0 16px rgba(232, 163, 61, 0);
   }
 }
+
+/* TV, 1920 by 1080 and up: everything larger, read from across a room. */
+@media (min-width: 1600px) {
+  .es-anchor {
+    top: 40px;
+    left: 60px;
+  }
+  .es-anchor-main {
+    font-size: 42px;
+  }
+  .es-anchor-time {
+    font-size: 30px;
+  }
+  .es-caption {
+    padding: 30px 340px 0 64px;
+  }
+  .es-title {
+    font-size: 76px;
+  }
+  .es-line {
+    font-size: 40px;
+  }
+  .es-stop {
+    right: 60px;
+    bottom: 50px;
+    min-width: 230px;
+    min-height: 110px;
+    font-size: 40px;
+  }
+  .es-begin-hello {
+    font-size: 110px;
+  }
+  .es-begin-sub {
+    font-size: 40px;
+  }
+  .es-begin-btn {
+    min-width: 400px;
+    min-height: 140px;
+    font-size: 56px;
+  }
+  .es-call {
+    min-width: 460px;
+    min-height: 150px;
+    font-size: 64px;
+  }
+  .es-end-line {
+    font-size: 92px;
+  }
+}
