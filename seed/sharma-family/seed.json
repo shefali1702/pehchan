@@ -1,0 +1,56 @@
+{
+  "_note": "Demo persona only. Replace names, stories and photos with your own family's real material, recorded with consent. Photos marked placeholder show a drawn stand-in until a real photo is added.",
+  "elderId": "kamla",
+  "people": [
+    { "id": "kamla", "name": "Kamla", "relationship": "", "callsElder": "", "isElder": true, "birthYear": 1950 },
+    { "id": "riya", "name": "Riya", "relationship": "granddaughter", "callsElder": "Dadi", "phone": "", "consent": null },
+    { "id": "arjun", "name": "Arjun", "relationship": "grandson", "callsElder": "Dadi", "phone": "", "consent": null },
+    { "id": "meera", "name": "Meera", "relationship": "daughter", "callsElder": "Ma", "phone": "", "consent": null },
+    { "id": "ramesh", "name": "Ramesh", "relationship": "husband", "callsElder": "", "isDeceased": true }
+  ],
+  "photos": [
+    {
+      "id": "seed-riya-diwali",
+      "src": "/seed/placeholder-1.svg",
+      "placeholder": true,
+      "year": 2019,
+      "place": "the old house",
+      "story": "Diwali at the old house",
+      "faces": [{ "personId": "riya", "bbox": { "x": 0.38, "y": 0.2, "w": 0.24, "h": 0.32 } }],
+      "uploadedBy": "riya"
+    },
+    {
+      "id": "seed-wedding",
+      "src": "/seed/placeholder-2.svg",
+      "placeholder": true,
+      "year": 1972,
+      "story": "your wedding",
+      "faces": [{ "personId": "ramesh", "bbox": { "x": 0.52, "y": 0.18, "w": 0.22, "h": 0.3 } }],
+      "uploadedBy": "meera"
+    },
+    {
+      "id": "seed-arjun",
+      "src": "/seed/placeholder-3.svg",
+      "placeholder": true,
+      "faces": [{ "personId": "arjun", "bbox": { "x": 0.38, "y": 0.2, "w": 0.24, "h": 0.32 } }],
+      "uploadedBy": "arjun"
+    },
+    {
+      "id": "seed-meera",
+      "src": "/seed/placeholder-4.svg",
+      "placeholder": true,
+      "faces": [{ "personId": "meera", "bbox": { "x": 0.38, "y": 0.2, "w": 0.24, "h": 0.32 } }],
+      "uploadedBy": "meera"
+    },
+    {
+      "id": "seed-riya-portrait",
+      "src": "/seed/placeholder-5.svg",
+      "placeholder": true,
+      "faces": [{ "personId": "riya", "bbox": { "x": 0.38, "y": 0.2, "w": 0.24, "h": 0.32 } }],
+      "uploadedBy": "riya"
+    }
+  ],
+  "voiceLetters": [],
+  "songs": [],
+  "avoid": []
+}

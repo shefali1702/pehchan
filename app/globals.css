@@ -1,0 +1,85 @@
+:root {
+  /* Site: a darkroom lit by marigold */
+  --kohl: #120e0b;
+  --ember: #1d1713;
+  --soot: #2a221c;
+  --paper: #f1eadc;
+  --paper-dim: #b9b0a1;
+  --ash: #8c8478;
+  --marigold: #e8a33d;
+  --haldi: #f2c230;
+  --sindoor: #c8361e;
+  --peacock: #0f5c5a;
+  --tulsi: #7e9c7a;
+
+  /* Elder screen */
+  --room: #15110e;
+  --moonlight: #ede6d6;
+
+  /* Family and caregiver apps */
+  --ink: #23202e;
+  --ink-soft: #5c5866;
+  --line: #e6e2da;
+  --white: #ffffff;
+  --page: #faf8f4;
+
+  --serif: var(--font-tiro), "Tiro Devanagari Hindi", Georgia, serif;
+  --sans: var(--font-mukta), "Mukta", system-ui, sans-serif;
+  --mono: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--kohl);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+canvas,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--marigold);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

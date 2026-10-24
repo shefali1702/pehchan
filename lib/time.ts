@@ -1,0 +1,14 @@
+export type PartOfDay = "morning" | "afternoon" | "evening" | "night";
+
+export function partOfDay(d = new Date()): PartOfDay {
+  const h = d.getHours();
+  if (h >= 5 && h < 12) return "morning";
+  if (h >= 12 && h < 17) return "afternoon";
+  if (h >= 17 && h < 21) return "evening";
+  return "night";
+}
+
+export function dayInWords(d = new Date()) {
+  const day = d.toLocaleDateString("en-IN", { weekday: "long" });
+  return `${day} ${partOfDay(d)}`;
+}

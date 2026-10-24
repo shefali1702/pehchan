@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+<rect width="1600" height="1000" fill="#2e2219"/>
+<rect x="40" y="40" width="1520" height="920" fill="none" stroke="#e8b866" stroke-opacity="0.18" stroke-width="2"/>
+<ellipse cx="800" cy="880" rx="330" ry="300" fill="#6b4b2a"/><circle cx="800" cy="360" r="125" fill="#6b4b2a"/>
+
+<text x="72" y="104" font-family="monospace" font-size="26" fill="#e8b866" opacity="0.75">Placeholder photo</text>
+<text x="72" y="142" font-family="monospace" font-size="22" fill="#e8b866" opacity="0.55">Riya. Replace with a real family photo.</text>
+</svg>
