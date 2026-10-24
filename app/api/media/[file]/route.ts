@@ -4,7 +4,7 @@ import { UPLOAD_DIR } from "@/lib/server/store";
 
 const TYPES: Record<string, string> = {
   jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp", heic: "image/heic",
-  webm: "audio/webm", ogg: "audio/ogg", m4a: "audio/mp4", mp3: "audio/mpeg", wav: "audio/wav",
+  webm: "audio/webm", ogg: "audio/ogg", m4a: "audio/mp4", mp3: "audio/mpeg", wav: "audio/wav", pdf: "application/pdf",
 };
 
 export async function GET(req: Request, { params }: { params: Promise<{ file: string }> }) {

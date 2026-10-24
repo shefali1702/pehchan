@@ -13,19 +13,39 @@ export async function POST(req: Request) {
   const d = db();
   const speaker = d.people.find((p) => p.id === speakerId);
   if (!speaker) return Response.json({ error: "Pick who you are first." }, { status: 400 });
-  if (!speaker.consent?.voice) return Response.json({ error: "Give consent for your voice to be played before recording." }, { status: 403 });
+  // The elder's own stories are covered by her living consent.
+  if (!speaker.isElder && !speaker.consent?.voice) return Response.json({ error: "Give consent for your voice to be played before recording." }, { status: 403 });
 
   const saved = await saveUpload(file, "voice_");
   const letter: VoiceLetter = {
     id: uid("vl_"),
     speakerId,
     photoId: String(form.get("photoId") ?? "") || null,
-    kind: form.get("kind") === "hello" ? "hello" : "letter",
+    kind: (["hello", "orientation", "story"].includes(String(form.get("kind"))) ? form.get("kind") : "letter") as VoiceLetter["kind"],
     src: saved.src,
     durationS: Number(form.get("durationS")) || 0,
     createdAt: new Date().toISOString(),
   };
   d.voiceLetters.push(letter);
+
+  // When she tells a story about a photo, whoever added it gets to hear it.
+  if (letter.kind === "story" && letter.photoId) {
+    const photo = d.photos.find((p) => p.id === letter.photoId);
+    const to = d.people.find((p) => p.id === photo?.uploadedBy);
+    if (photo && to && !to.isElder) {
+      const n = {
+        id: uid("nt_"),
+        toPersonId: to.id,
+        kind: "story" as const,
+        text: `${to.callsElder || speaker.name} told a story about your photo.`,
+        photo: photo.placeholder ? undefined : photo.src,
+        audio: letter.src,
+        at: new Date().toISOString(),
+      };
+      d.notifications.push(n);
+      emit("notification", n);
+    }
+  }
   save();
   emit("family", { kind: "voice", id: letter.id });
 

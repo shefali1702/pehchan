@@ -29,16 +29,21 @@ export default function ElderScreen() {
   useEffect(() => {
     fetch("/api/family")
       .then((r) => r.json())
-      .then((d) => setElder(d.people.find((p: Person) => p.id === d.elderId)));
-    const q = new URLSearchParams(location.search).get("theme");
-    const pod = partOfDay();
-    setTheme(q === "morning" || q === "evening" ? q : pod === "morning" || pod === "afternoon" ? "morning" : "evening");
+      .then((d) => {
+        setElder(d.people.find((p: Person) => p.id === d.elderId));
+        // Evening calm starts at the hour the caregiver chose (17:00 by default).
+        const q = new URLSearchParams(location.search).get("theme");
+        const h = new Date().getHours();
+        const evening = h >= (d.settings?.eveningFrom ?? 17) || h < 5;
+        setTheme(q === "morning" || q === "evening" ? q : evening ? "evening" : "morning");
+      });
     setNow(new Date());
     const t = setInterval(() => setNow(new Date()), 60000);
     return () => clearInterval(t);
   }, []);
 
-  const slow = theme === "evening" ? 1.2 : 1; // evening calm: longer holds
+  // Evening calm and Comfort mode both slow everything down.
+  const slow = (theme === "evening" ? 1.2 : 1) * (reel?.mode === "comfort" ? 1.4 : 1);
 
   const begin = async () => {
     if (phase === "reel") return;
@@ -49,7 +54,11 @@ export default function ElderScreen() {
     try {
       wake.current = await navigator.wakeLock?.request("screen");
     } catch {}
-    const r: Reel = await fetch("/api/reel/build", { method: "POST" }).then((x) => x.json());
+    const r: Reel = await fetch("/api/reel/build", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ evening: theme === "evening" }),
+    }).then((x) => x.json());
     // Preload images so the cross-fades never stutter.
     const s: Record<string, Size> = {};
     await Promise.all(
@@ -140,7 +149,16 @@ export default function ElderScreen() {
       )}
 
       {phase === "reel" && reel && (
-        <Stage items={reel.items} index={index} sizes={sizes} mixer={mixer} slow={slow} onDone={next} sessionId={session} />
+        <Stage
+          items={reel.items}
+          index={index}
+          sizes={sizes}
+          mixer={mixer}
+          slow={slow}
+          onDone={next}
+          sessionId={session}
+          elder={elder}
+        />
       )}
 
       {phase === "end" && reel && <CallCard reel={reel} />}
@@ -185,7 +203,9 @@ function Stage({
   slow,
   onDone,
   sessionId,
+  elder,
 }: {
+  elder: Person | null;
   items: ReelItem[];
   index: number;
   sizes: Record<string, Size>;
@@ -205,7 +225,7 @@ function Stage({
 
   // Photo items: caption, voice letter, then hold.
   useEffect(() => {
-    if (item.type !== "photo") return;
+    if (item.type !== "photo" && item.type !== "orient") return;
     let alive = true;
     setCaption({ title: item.title, line: item.line });
     const started = Date.now();
@@ -238,6 +258,63 @@ function Stage({
       clearTimeout(timer);
     };
   }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Tell mode: her photos with an open invitation to talk. Silence is fine too.
+  const [telling, setTelling] = useState<"no" | "rec" | "thanks">("no");
+  const recorder = useRef<MediaRecorder | null>(null);
+  const tellTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const canRecord = typeof navigator !== "undefined" && !!navigator.mediaDevices?.getUserMedia;
+  useEffect(() => {
+    if (item.type !== "tell") return;
+    setTelling("no");
+    setCaption({ title: item.title, line: item.line });
+    tellTimer.current = setTimeout(onDone, HOLD_MS * slow * 2);
+    return () => {
+      if (tellTimer.current) clearTimeout(tellTimer.current);
+      if (recorder.current?.state === "recording") recorder.current.stop();
+    };
+  }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const startTelling = async () => {
+    if (item.type !== "tell") return;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (tellTimer.current) clearTimeout(tellTimer.current);
+      mixer.current?.duck(true);
+      const type = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm"].find((t) => MediaRecorder.isTypeSupported(t));
+      const r = new MediaRecorder(stream, type ? { mimeType: type } : undefined);
+      const chunks: BlobPart[] = [];
+      const started = Date.now();
+      const photoId = item.photoId;
+      r.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+      r.onstop = () => {
+        stream.getTracks().forEach((t) => t.stop());
+        mixer.current?.duck(false);
+        const blob = new Blob(chunks, { type: r.mimeType });
+        const f = new FormData();
+        f.append("file", new File([blob], "story.webm", { type: blob.type.split(";")[0] }));
+        f.append("speakerId", elder?.id ?? "");
+        f.append("kind", "story");
+        f.append("photoId", photoId);
+        f.append("durationS", String(Math.round((Date.now() - started) / 1000)));
+        fetch("/api/voice", { method: "POST", body: f }).catch(() => {});
+      };
+      recorder.current = r;
+      r.start();
+      setTelling("rec");
+      setCaption((c) => ({ ...c, line: "We are listening." }));
+      tellTimer.current = setTimeout(() => finishTelling(), 120000);
+    } catch {
+      // No microphone: the photo simply stays a little longer.
+    }
+  };
+  const finishTelling = () => {
+    if (recorder.current?.state === "recording") recorder.current.stop();
+    if (tellTimer.current) clearTimeout(tellTimer.current);
+    setTelling("thanks");
+    setCaption((c) => ({ ...c, line: `Thank you${elder ? `, ${elder.name}` : ""}. Your family will hear this.` }));
+    tellTimer.current = setTimeout(onDone, 5000);
+  };
 
   // Gentle recognition game: hints arrive one at a time. Nothing can go wrong.
   useEffect(() => {
@@ -350,7 +427,13 @@ function Stage({
         <p key={`l-${index}-${caption.line}`} className="es-line">
           {caption.line}
         </p>
-        <Wave mixer={mixer} on={voiceOn} />
+        {item.type === "tell" && canRecord && telling !== "thanks" ? (
+          <button className={`es-tell${telling === "rec" ? " is-rec" : ""}`} onClick={telling === "rec" ? finishTelling : startTelling}>
+            {telling === "rec" ? "I have finished" : "Tell a story"}
+          </button>
+        ) : (
+          <Wave mixer={mixer} on={voiceOn} />
+        )}
       </div>
     </>
   );

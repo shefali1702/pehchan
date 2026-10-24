@@ -13,6 +13,7 @@ const EXT: Record<string, string> = {
   "audio/mpeg": "mp3",
   "audio/wav": "wav",
   "audio/x-m4a": "m4a",
+  "application/pdf": "pdf",
 };
 
 export async function saveUpload(file: File, prefix: string) {

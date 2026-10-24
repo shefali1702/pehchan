@@ -495,7 +495,7 @@ function MyPhotos({ data, me }: { data: FamilyData; me: Person }) {
 /* ---------------- Record ---------------- */
 
 function Record({ data, me, onSaved }: { data: FamilyData; me: Person; onSaved: () => void }) {
-  const [kind, setKind] = useState<"letter" | "hello">("letter");
+  const [kind, setKind] = useState<"letter" | "hello" | "orientation">("letter");
   const [photoId, setPhotoId] = useState("");
   const [state, setState] = useState<"idle" | "rec" | "review" | "saving" | "saved">("idle");
   const [secs, setSecs] = useState(0);
@@ -506,7 +506,7 @@ function Record({ data, me, onSaved }: { data: FamilyData; me: Person; onSaved: 
   const started = useRef(0);
   const meter = useRef<HTMLCanvasElement>(null);
   const elder = data.people.find((p) => p.id === data.elderId);
-  const limit = kind === "hello" ? 6 : 30;
+  const limit = kind === "hello" ? 6 : kind === "orientation" ? 15 : 30;
   const blobUrl = useMemo(() => (blob ? URL.createObjectURL(blob) : null), [blob]);
   const photos = data.photos.filter((p) => p.uploadedBy === me.id || p.faces.some((f) => f.personId === me.id));
   const mine = data.voiceLetters.filter((v) => v.speakerId === me.id);
@@ -612,6 +612,10 @@ function Record({ data, me, onSaved }: { data: FamilyData; me: Person; onSaved: 
           Hello for the game
           <small>A few words</small>
         </button>
+        <button className={kind === "orientation" ? "is-on" : ""} onClick={() => { setKind("orientation"); setState("idle"); setBlob(null); }}>
+          Evening words
+          <small>Opens her evening reel</small>
+        </button>
       </div>
 
       <div className="fa-prompt">
@@ -622,6 +626,16 @@ function Record({ data, me, onSaved }: { data: FamilyData; me: Person; onSaved: 
               <li>Start with your name and how you are related.</li>
               <li>Speak slowly, as if you are sitting next to her.</li>
               <li>Say &ldquo;this is&rdquo; rather than &ldquo;do you remember&rdquo;.</li>
+            </ul>
+          </>
+        ) : kind === "orientation" ? (
+          <>
+            <p className="fa-prompt-say">
+              &ldquo;{me.callsElder || elder?.name}, you&apos;re at home. It&apos;s evening. We&apos;ll see you soon.&rdquo;
+            </p>
+            <ul>
+              <li>Evenings can be the hardest hours. This plays first in her evening reel.</li>
+              <li>Keep it short, calm and true.</li>
             </ul>
           </>
         ) : (
@@ -682,7 +696,13 @@ function Record({ data, me, onSaved }: { data: FamilyData; me: Person; onSaved: 
         )}
         {state === "saved" && (
           <div className="fa-done">
-            <h2>{kind === "hello" ? "Your hello is in her game." : "Your voice letter is in her next reel."}</h2>
+            <h2>
+              {kind === "hello"
+                ? "Your hello is in her game."
+                : kind === "orientation"
+                  ? "Your words will open her evening reel."
+                  : "Your voice letter is in her next reel."}
+            </h2>
             <button className="fa-btn fa-btn-line" onClick={() => { setBlob(null); setState("idle"); }}>
               Record another
             </button>
@@ -699,7 +719,7 @@ function Record({ data, me, onSaved }: { data: FamilyData; me: Person; onSaved: 
             {mine.map((v) => (
               <li key={v.id}>
                 <span>
-                  <b>{v.kind === "hello" ? "Hello for the game" : "Voice letter"}</b>
+                  <b>{v.kind === "hello" ? "Hello for the game" : v.kind === "orientation" ? "Evening words" : "Voice letter"}</b>
                   <small>
                     {v.durationS} s, {ago(v.createdAt)}
                     {v.transcript ? `: "${v.transcript}"` : ""}
@@ -756,6 +776,7 @@ function Inbox({ list, onOpen }: { list: Notification[]; onOpen: () => void }) {
               <span>
                 <b>{n.text}</b>
                 <small>{ago(n.at)}</small>
+                {n.audio && <audio controls src={n.audio} preload="none" className="fa-inbox-audio" />}
               </span>
             </li>
           ))}

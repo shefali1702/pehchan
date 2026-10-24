@@ -37,8 +37,11 @@ export interface VoiceLetter {
   id: string;
   speakerId: string;
   photoId?: string | null;
-  /** "hello" clips ("It's me, Riya!") are used by the recognition game. */
-  kind: "letter" | "hello";
+  /**
+   * "hello" clips ("It's me, Riya!") are used by the recognition game,
+   * "orientation" clips open an evening reel, "story" is the elder's own voice.
+   */
+  kind: "letter" | "hello" | "orientation" | "story";
   src: string;
   durationS: number;
   transcript?: string;
@@ -59,6 +62,27 @@ export interface AvoidItem {
   id: string;
   text: string;
   personId?: string | null;
+}
+
+export type Mode = "tell" | "remember" | "comfort";
+
+export interface Settings {
+  mode: Mode;
+  /** Photos per reel, 4 to 8. */
+  photos: number;
+  /** Hour (local) when evening calm begins. */
+  eveningFrom: number;
+}
+
+export interface Consent {
+  id: string;
+  personId: string;
+  kind: "living" | "voice" | "face" | "guardian";
+  prompt?: string;
+  recording?: string;
+  documentPath?: string;
+  createdAt: string;
+  withdrawnAt?: string;
 }
 
 export type ReelItem =
@@ -82,12 +106,31 @@ export type ReelItem =
       placeholder?: boolean;
       glow?: FaceTag["bbox"];
       hello?: string | null;
+    }
+  | {
+      type: "tell";
+      photoId: string;
+      src: string;
+      placeholder?: boolean;
+      title: string;
+      line: string;
+      glow?: FaceTag["bbox"];
+    }
+  | {
+      type: "orient";
+      src: string;
+      placeholder?: boolean;
+      title: string;
+      line: string;
+      glow?: FaceTag["bbox"];
+      voice: { id: string; src: string; speakerId: string };
     };
 
 export interface Reel {
   id: string;
   date: string;
   elderId: string;
+  mode: Mode;
   items: ReelItem[];
   song?: { src: string; title: string } | null;
   callPerson?: { id: string; name: string; phone?: string; photo?: string } | null;
@@ -121,8 +164,9 @@ export interface RecognitionEvent {
 export interface Notification {
   id: string;
   toPersonId: string;
-  kind: "smiled";
+  kind: "smiled" | "story";
   text: string;
+  audio?: string;
   photo?: string;
   at: string;
 }
@@ -138,4 +182,6 @@ export interface DB {
   moods: MoodLog[];
   recognition: RecognitionEvent[];
   notifications: Notification[];
+  settings: Settings;
+  consents: Consent[];
 }

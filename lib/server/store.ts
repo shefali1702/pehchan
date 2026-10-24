@@ -30,14 +30,21 @@ function seed(): DB {
     moods: [],
     recognition: [],
     notifications: [],
+    settings: { ...DEFAULT_SETTINGS },
+    consents: [],
   };
 }
+
+export const DEFAULT_SETTINGS = { mode: "remember" as const, photos: 6, eveningFrom: 17 };
 
 export function db(): DB {
   if (g.__pehchanDb) return g.__pehchanDb;
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
   if (fs.existsSync(DB_FILE)) {
     g.__pehchanDb = JSON.parse(fs.readFileSync(DB_FILE, "utf8")) as DB;
+    // Older demo files predate these fields.
+    g.__pehchanDb.settings ??= { ...DEFAULT_SETTINGS };
+    g.__pehchanDb.consents ??= [];
   } else {
     g.__pehchanDb = seed();
     save();

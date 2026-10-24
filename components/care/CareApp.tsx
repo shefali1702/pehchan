@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { Mood, MoodLog, RecognitionEvent, Session } from "@/lib/types";
+import type { Mode, Mood, MoodLog, RecognitionEvent, Session, Settings } from "@/lib/types";
 import { ago, postJSON, useEvents, useFamily } from "@/components/family/useFamily";
 
 const MOODS: Mood[] = ["calm", "happy", "confused", "upset"];
@@ -86,9 +86,9 @@ export default function CareApp() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={item.src} alt="" />
                   <div>
-                    <b>{item.type === "photo" ? item.title : `Who is this? ${item.name}`}</b>
+                    <b>{item.type === "game" ? `Who is this? ${item.name}` : item.title}</b>
                     <small>
-                      {item.type === "photo" ? item.line : "The gentle recognition game"}
+                      {item.type === "game" ? "The gentle recognition game" : item.type === "tell" ? "Tell mode: her own stories" : item.line}
                       {!live && session.endedAt ? ` · reel ended ${ago(session.endedAt)}` : ""}
                     </small>
                   </div>
@@ -156,6 +156,11 @@ export default function CareApp() {
               ))}
             </ul>
           </section>
+          <StagePanel she={she} />
+          <CheckIn />
+          <p className="cg-links">
+            <a href="/care/summary">Summary for her doctor</a> · <a href="/consent">Record her living consent</a>
+          </p>
           <p className="cg-links">
             Looking after someone is hard work. The <a href="https://ardsi.org/" target="_blank" rel="noreferrer">Alzheimer&apos;s and Related Disorders Society of India</a> runs helplines and carer support.
           </p>
@@ -200,4 +205,70 @@ function buildInsights(rec: RecognitionEvent[], moods: MoodLog[], sessions: Sess
   const top = [...good.entries()].sort((a, b) => b[1] - a[1])[0];
   if (top && top[1] >= 2) out.push({ text: `Reels with ${top[0].split(",")[0]} have been followed by calm or smiles ${top[1]} times.`, calm: true });
   return out;
+}
+
+const MODES: { id: Mode; label: string; body: string }[] = [
+  { id: "tell", label: "Tell", body: "Early stage. She talks over her photos and her own voice is saved for the family." },
+  { id: "remember", label: "Remember", body: "Middle stage. The daily reel with the gentle recognition game." },
+  { id: "comfort", label: "Comfort", body: "Late stage. Faces, voices and music only. Nothing to tap, slower." },
+];
+
+function StagePanel({ she }: { she: string }) {
+  const [s, setS] = useState<Settings | null>(null);
+  useEffect(() => {
+    fetch("/api/settings", { cache: "no-store" }).then((r) => r.json()).then(setS);
+  }, []);
+  const set = async (patch: Partial<Settings>) => setS(await postJSON("/api/settings", patch));
+  if (!s) return null;
+  return (
+    <section className="cg-panel" style={{ marginTop: 16 }}>
+      <h2>How {she}&apos;s reel works</h2>
+      <div className="cg-modes" role="radiogroup" aria-label="Stage">
+        {MODES.map((m) => (
+          <button key={m.id} role="radio" aria-checked={s.mode === m.id} className={s.mode === m.id ? "is-on" : ""} onClick={() => set({ mode: m.id })}>
+            <b>{m.label}</b>
+            <span>{m.body}</span>
+          </button>
+        ))}
+      </div>
+      <div className="cg-length">
+        <span>Photos in each reel</span>
+        <div className="cg-stepper">
+          <button onClick={() => set({ photos: s.photos - 1 })} disabled={s.photos <= 4} aria-label="Fewer photos">&minus;</button>
+          <b>{s.photos}</b>
+          <button onClick={() => set({ photos: s.photos + 1 })} disabled={s.photos >= 8} aria-label="More photos">+</button>
+        </div>
+      </div>
+      <div className="cg-length">
+        <span>Evening calm starts at</span>
+        <div className="cg-stepper">
+          <button onClick={() => set({ eveningFrom: s.eveningFrom - 1 })} disabled={s.eveningFrom <= 12} aria-label="Earlier">&minus;</button>
+          <b>{s.eveningFrom}:00</b>
+          <button onClick={() => set({ eveningFrom: s.eveningFrom + 1 })} disabled={s.eveningFrom >= 23} aria-label="Later">+</button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CheckIn() {
+  const [answer, setAnswer] = useState<string | null>(null);
+  return (
+    <section className="cg-panel cg-checkin" style={{ marginTop: 16 }}>
+      <h2>And how are you doing?</h2>
+      {answer ? (
+        <p className="cg-idle">
+          {answer === "hard"
+            ? "Thank you for saying so. A helpline or a carers' group can share the load, and a short break is not a failure."
+            : "Good to hear. Look after yourself too."}
+        </p>
+      ) : (
+        <div className="cg-moods cg-moods-3">
+          <button onClick={() => setAnswer("ok")}>Doing alright</button>
+          <button onClick={() => setAnswer("ok")}>Tired</button>
+          <button onClick={() => setAnswer("hard")}>It is hard today</button>
+        </div>
+      )}
+    </section>
+  );
 }

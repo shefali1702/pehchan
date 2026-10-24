@@ -522,7 +522,7 @@ body:has(.cg) {
 /* Record */
 .fa-seg {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   border: 1px solid var(--line);
   border-radius: 10px;
   overflow: hidden;
@@ -948,4 +948,73 @@ body:has(.cg) {
   .cg-moods {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.cg-modes {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.cg-modes button {
+  display: grid;
+  grid-template-columns: 124px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  text-align: left;
+  padding: 12px 14px;
+  border: 1px solid #cfc9bd;
+  border-radius: 8px;
+  background: var(--white);
+}
+.cg-modes b {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 22px;
+}
+.cg-modes span {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.cg-modes button.is-on {
+  border-color: var(--ink);
+  box-shadow: inset 4px 0 0 var(--marigold);
+  background: #fffaf0;
+}
+.cg-length {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid #f0ede7;
+  font-weight: 500;
+}
+.cg-stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cg-stepper button {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid #cfc9bd;
+  background: var(--white);
+  font-size: 22px;
+}
+.cg-stepper b {
+  min-width: 54px;
+  text-align: center;
+  font-family: var(--mono);
+}
+.cg-moods-3 {
+  grid-template-columns: 1fr;
+}
+.cg-moods-3 button {
+  min-height: 50px;
+}
+
+.fa-inbox-audio {
+  width: 100%;
+  height: 36px;
+  margin-top: 8px;
 }

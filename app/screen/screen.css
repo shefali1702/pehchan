@@ -326,3 +326,30 @@
     opacity: 0.9;
   }
 }
+
+/* Tell mode */
+.es-tell {
+  margin-top: auto;
+  margin-bottom: 26px;
+  align-self: flex-start;
+  min-width: 300px;
+  min-height: 86px;
+  padding: 0 36px;
+  border-radius: 14px;
+  border: 3px solid var(--marigold);
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--serif);
+  font-size: clamp(28px, 2.6vw, 38px);
+}
+.es-tell.is-rec {
+  background: var(--marigold);
+  color: #1a120a;
+  box-shadow: 0 0 0 0 rgba(232, 163, 61, 0.5);
+  animation: es-listen 2.6s ease-in-out infinite;
+}
+@keyframes es-listen {
+  50% {
+    box-shadow: 0 0 0 16px rgba(232, 163, 61, 0);
+  }
+}
