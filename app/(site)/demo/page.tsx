@@ -17,7 +17,7 @@ export default function Demo() {
   const base = ip ? `http://${ip}:3000` : null;
   return (
     <>
-      <header className="page-head">
+      <header className="page-head ph-neel">
         <h1>Open all three. Watch the loop close.</h1>
         <span className="page-deva" aria-hidden="true">देखो</span>
         <p className="lede">
@@ -25,6 +25,7 @@ export default function Demo() {
           live in other cities. Her daughter Meera looks after her at home.
         </p>
       </header>
+      <div className="reading">
 
       <div className="doors">
         <Link href="/screen" className="door door-elder" target="_blank">
@@ -77,6 +78,7 @@ export default function Demo() {
           <ResetDemo />
         </div>
       </section>
+      </div>
     </>
   );
 }

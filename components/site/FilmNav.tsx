@@ -4,29 +4,32 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const TABS = [
-  { href: "/", label: "Home", n: "01" },
-  { href: "/about", label: "About", n: "02" },
-  { href: "/how-it-works", label: "How it works", n: "03" },
-  { href: "/principles", label: "Principles", n: "04" },
-  { href: "/demo", label: "Demo", n: "05" },
+  { href: "/", label: "Home", tone: "marigold" },
+  { href: "/about", label: "About", tone: "sindoor" },
+  { href: "/how-it-works", label: "How it works", tone: "peacock" },
+  { href: "/principles", label: "Principles", tone: "rani" },
+  { href: "/demo", label: "Demo", tone: "neel" },
 ];
 
-// The tab bar is a strip of negative film; each tab is a frame.
+// The tab bar is a row of painted shop plaques.
 export default function FilmNav() {
   const path = usePathname();
   return (
-    <header className="film">
-      <Link href="/" className="film-brand" aria-label="Pehchan home">
-        <span className="film-brand-deva">पहचान</span>
-        <span className="film-brand-latin">Pehchan</span>
+    <header className="sn">
+      <Link href="/" className="sn-brand" aria-label="Pehchan home">
+        <span className="sn-brand-deva">पहचान</span>
       </Link>
-      <nav className="film-strip" aria-label="Main">
+      <nav className="sn-tabs" aria-label="Main">
         {TABS.map((t) => {
           const active = t.href === "/" ? path === "/" : path.startsWith(t.href);
           return (
-            <Link key={t.href} href={t.href} className={`film-frame${active ? " is-active" : ""}`} aria-current={active ? "page" : undefined}>
-              <span className="film-n">{t.n}</span>
-              <span className="film-label">{t.label}</span>
+            <Link
+              key={t.href}
+              href={t.href}
+              className={`sn-tab sn-${t.tone}${active ? " is-active" : ""}`}
+              aria-current={active ? "page" : undefined}
+            >
+              {t.label}
             </Link>
           );
         })}

@@ -20,7 +20,7 @@ const RULES = [
 export default function Principles() {
   return (
     <>
-      <header className="page-head">
+      <header className="page-head ph-rani">
         <h1>Twelve things we will not bend on.</h1>
         <span className="page-deva" aria-hidden="true">वचन</span>
         <p className="lede">
@@ -28,7 +28,8 @@ export default function Principles() {
           do not build the feature.
         </p>
       </header>
-      <section className="sec" style={{ paddingTop: 20 }}>
+      <div className="reading">
+      <section className="sec" style={{ paddingTop: 70 }}>
         <ol className="rules">
           {RULES.map(([h, p], i) => (
             <li key={h}>
@@ -41,9 +42,9 @@ export default function Principles() {
           ))}
         </ol>
       </section>
-      <section className="sec refused" style={{ paddingTop: 40 }}>
+      <section className="block block-ink"><div className="sec">
         <p className="kicker">What we chose not to build</p>
-        <div className="refused-grid">
+        <div className="refused">
           <div>
             <p className="refused-word"><s>A cloned voice.</s></p>
             <p>
@@ -59,7 +60,7 @@ export default function Principles() {
             </p>
           </div>
         </div>
-      </section>
+      </div></section>
       <section className="chapter">
         <div className="chapter-side">
           <span className="chapter-num">स</span>
@@ -74,6 +75,7 @@ export default function Principles() {
           </p>
         </div>
       </section>
+      </div>
     </>
   );
 }

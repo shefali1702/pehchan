@@ -6,7 +6,7 @@ export const metadata = { title: "How it works · Pehchan" };
 export default function How() {
   return (
     <>
-      <header className="page-head">
+      <header className="page-head ph-peacock">
         <h1>Three screens. One family.</h1>
         <span className="page-deva" aria-hidden="true">घर</span>
         <p className="lede">
@@ -14,6 +14,7 @@ export default function How() {
           in it find out.
         </p>
       </header>
+      <div className="reading">
 
       <section className="chapter">
         <div className="chapter-side">
@@ -100,6 +101,7 @@ export default function How() {
           <Link href="/demo" className="link-arrow">Try it in the demo</Link>
         </div>
       </section>
+      </div>
     </>
   );
 }

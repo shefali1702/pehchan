@@ -50,7 +50,7 @@ const OTHERS = [
 export default function About() {
   return (
     <>
-      <header className="page-head">
+      <header className="page-head ph-sindoor">
         <h1>A name that means recognition.</h1>
         <span className="page-deva" aria-hidden="true">पहचान</span>
         <p className="lede">
@@ -58,6 +58,7 @@ export default function About() {
           with, the faces of family, and what it protects: her identity.
         </p>
       </header>
+      <div className="reading">
 
       <section className="chapter">
         <div className="chapter-side">
@@ -161,6 +162,7 @@ export default function About() {
           </ul>
         </div>
       </section>
+      </div>
     </>
   );
 }

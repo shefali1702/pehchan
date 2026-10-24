@@ -23,6 +23,19 @@
   --white: #ffffff;
   --page: #faf8f4;
 
+  /* Website: hand-painted signboard */
+  --s-marigold: #f5a000;
+  --s-haldi: #ffd43b;
+  --s-sindoor: #d62718;
+  --s-peacock: #005f66;
+  --s-neel: #1d4e9e;
+  --s-rani: #e4007c;
+  --s-leaf: #2d7d32;
+  --s-ink: #1b1511;
+  --s-paper: #fff6e3;
+
+  --poster: var(--font-rozha), "Rozha One", Georgia, serif;
+  --painted: var(--font-yatra), "Yatra One", Georgia, serif;
   --serif: var(--font-tiro), "Tiro Devanagari Hindi", Georgia, serif;
   --sans: var(--font-mukta), "Mukta", system-ui, sans-serif;
   --mono: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;

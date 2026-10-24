@@ -260,8 +260,8 @@ export default function PortraitScroll() {
       if (glow > 0) {
         const gx = ox + 510 * scale, gy = oy + 420 * scale;
         const g = ctx.createRadialGradient(gx, gy, 0, gx, gy, 560 * scale);
-        g.addColorStop(0, `rgba(232,163,61,${0.26 * glow})`);
-        g.addColorStop(1, "rgba(232,163,61,0)");
+        g.addColorStop(0, `rgba(255,212,59,${0.32 * glow})`);
+        g.addColorStop(1, "rgba(255,212,59,0)");
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, W, H);
       }
@@ -277,7 +277,7 @@ export default function PortraitScroll() {
         const dev = clamp((p - 0.3 - delay[k] * 0.25) / 0.38);
         const [r, g, b] = col[k];
         const grey = 0.3 * r + 0.59 * g + 0.11 * b;
-        const gr = 96 + grey * 0.3;
+        const gr = 150 + grey * 0.35;
         const rr = gr + (r - gr) * dev, gg = gr + (g - gr) * dev, bb = gr + (b - gr) * dev;
         const a = 0.42 + 0.58 * e;
         ctx.fillStyle = `rgba(${rr | 0},${gg | 0},${bb | 0},${a})`;
@@ -324,15 +324,9 @@ export default function PortraitScroll() {
             </p>
           ))}
           <div className="ps-finale" ref={finale}>
-            <h1 className="ps-title">
-              <span className="ps-title-deva">पहचान</span>
-              <span className="ps-title-latin">Pehchan</span>
-            </h1>
-            <p className="ps-tag">She may forget the day. She will still feel who loves her.</p>
-            <div className="ps-cta">
-              <Link href="/demo" className="btn btn-marigold">Open the demo</Link>
-              <Link href="/how-it-works" className="btn btn-line">See how it works</Link>
-            </div>
+            <p className="ps-title">Remembering is optional.</p>
+            <p className="ps-title ps-title-2">Feeling loved is the point.</p>
+            <Link href="/how-it-works" className="btn btn-haldi">See how it works</Link>
           </div>
         </div>
         <div className="ps-hint" ref={hint}>
