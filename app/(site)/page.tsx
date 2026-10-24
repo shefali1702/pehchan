@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PortraitScroll from "@/components/site/PortraitScroll";
 import Garland from "@/components/site/Garland";
+import DeviceTrio from "@/components/site/DeviceTrio";
 
 export default function Home() {
   return (
@@ -8,6 +9,8 @@ export default function Home() {
       <PortraitScroll />
 
       <Garland />
+
+      <DeviceTrio />
 
       <section className="sec family-index">
         <p className="kicker">One app, three people</p>

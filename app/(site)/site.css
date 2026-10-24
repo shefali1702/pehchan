@@ -1307,3 +1307,125 @@ html[data-splash="on"] body {
   border-color: var(--sindoor);
   color: var(--paper);
 }
+
+/* ---------- Live devices ---------- */
+
+.dv {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 110px 32px 60px;
+}
+.dv-head {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.dv-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 3.2fr 1fr;
+  align-items: end;
+  gap: 0;
+  padding-top: 10px;
+}
+.dv-stage::before {
+  /* the warm light of the room the photos are lighting */
+  content: "";
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  top: 0;
+  bottom: 18%;
+  background: radial-gradient(closest-side, rgba(232, 163, 61, 0.2), transparent);
+  filter: blur(20px);
+  pointer-events: none;
+}
+.dv figure {
+  margin: 0;
+  position: relative;
+}
+.dv figcaption {
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ash);
+  text-align: center;
+}
+.dv figcaption b {
+  display: block;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 19px;
+  color: var(--paper);
+  margin-bottom: 2px;
+}
+.dv-bezel {
+  background: #050403;
+  border: 1px solid #3a3029;
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+.dv-tablet {
+  z-index: 1;
+}
+.dv-tablet .dv-bezel {
+  border-radius: 26px;
+  padding: 18px;
+}
+.dv-tablet .dv-screen {
+  border-radius: 10px;
+}
+.dv-phone {
+  z-index: 2;
+}
+.dv-phone .dv-bezel {
+  border-radius: 34px;
+  padding: 9px;
+}
+.dv-phone .dv-screen {
+  border-radius: 26px;
+}
+.dv-left {
+  margin-right: -60px;
+  transform: translateY(30px);
+}
+.dv-right {
+  margin-left: -60px;
+  transform: translateY(30px);
+}
+.dv-screen {
+  position: relative;
+  overflow: hidden;
+  background: var(--room);
+  width: 100%;
+}
+.dv-screen iframe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+@media (max-width: 900px) {
+  .dv {
+    padding: 80px 16px 40px;
+  }
+  .dv-stage {
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 14px;
+  }
+  .dv-tablet {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .dv-tablet .dv-bezel {
+    padding: 10px;
+    border-radius: 16px;
+  }
+  .dv-left,
+  .dv-right {
+    margin: 0;
+    transform: none;
+  }
+}

@@ -13,9 +13,11 @@ export class Mixer {
   private songEl: HTMLAudioElement | null = null;
   private voiceEl: HTMLAudioElement | null = null;
 
-  constructor() {
+  /** Muted mixers drive the silent preview inside the home page's tablet. */
+  constructor(private muted = false) {
     this.ctx = new AudioContext();
     this.master = this.ctx.createGain();
+    if (muted) this.master.gain.value = 0;
     this.master.connect(this.ctx.destination);
     this.music = this.ctx.createGain();
     this.music.gain.value = 0;
@@ -112,6 +114,7 @@ export class Mixer {
   /** Neutral narrator. Clearly not a family member. */
   speak(text: string): Promise<void> {
     return new Promise((resolve) => {
+      if (this.muted) return void setTimeout(resolve, 1500);
       if (!("speechSynthesis" in window)) return resolve();
       const u = new SpeechSynthesisUtterance(text);
       const voices = speechSynthesis.getVoices();

@@ -17,11 +17,19 @@ export default function FamilyApp() {
   const [inbox, setInbox] = useState<Notification[]>([]);
   const [ready, setReady] = useState(false);
 
+  const [preview, setPreview] = useState(false);
   useEffect(() => {
-    try {
-      setMe(localStorage.getItem(ME_KEY));
-    } catch {}
-    const t = new URLSearchParams(location.search).get("tab") as Tab | null;
+    const q = new URLSearchParams(location.search);
+    // ?preview=1&as=riya shows the app inside the home page's phone, without touching this device's choice.
+    if (q.has("preview")) {
+      setPreview(true);
+      setMe(q.get("as"));
+    } else {
+      try {
+        setMe(localStorage.getItem(ME_KEY));
+      } catch {}
+    }
+    const t = q.get("tab") as Tab | null;
     if (t) setTab(t);
     setReady(true);
   }, []);
@@ -89,7 +97,8 @@ export default function FamilyApp() {
   if (!data || !ready) return <div className="fa fa-loading">Loading the Sharma family</div>;
 
   if (!person) return <WhoAreYou data={data} onPick={choose} />;
-  if (!person.consent) return <Consent person={person} elderName={elder?.name ?? ""} onDone={reload} />;
+  if (!person.consent && !preview) return <Consent person={person} elderName={elder?.name ?? ""} onDone={reload} />;
+  const shown = person.consent ? person : { ...person, consent: { face: true, voice: true, at: "" } };
 
   return (
     <div className="fa">
@@ -118,8 +127,8 @@ export default function FamilyApp() {
       )}
 
       <main className="fa-main">
-        {tab === "add" && <AddPhoto data={data} me={person} onSaved={reload} />}
-        {tab === "record" && <Record data={data} me={person} onSaved={reload} />}
+        {tab === "add" && <AddPhoto data={data} me={shown} onSaved={reload} />}
+        {tab === "record" && <Record data={data} me={shown} onSaved={reload} />}
         {tab === "inbox" && <Inbox list={inbox} onOpen={() => setFresh(null)} />}
         {tab === "you" && <You data={data} me={person} onChange={reload} onSwitch={() => choose(null)} />}
       </main>

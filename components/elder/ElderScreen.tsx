@@ -25,6 +25,8 @@ export default function ElderScreen() {
   const mixer = useRef<Mixer | null>(null);
   const session = useRef<string | null>(null);
   const wake = useRef<WakeLockSentinel | null>(null);
+  // ?preview=1: silent, self-starting, looping, and never logged as a session.
+  const preview = useRef(false);
 
   useEffect(() => {
     fetch("/api/family")
@@ -38,6 +40,8 @@ export default function ElderScreen() {
         setTheme(q === "morning" || q === "evening" ? q : evening ? "evening" : "morning");
       });
     setNow(new Date());
+    preview.current = new URLSearchParams(location.search).has("preview");
+    if (preview.current) setTimeout(() => beginRef.current(), 900);
     const t = setInterval(() => setNow(new Date()), 60000);
     return () => clearInterval(t);
   }, []);
@@ -47,13 +51,15 @@ export default function ElderScreen() {
 
   const begin = async () => {
     if (phase === "reel") return;
-    const m = new Mixer();
+    const m = new Mixer(preview.current);
     mixer.current = m;
     setLeaving(false);
-    document.documentElement.requestFullscreen?.().catch(() => {});
-    try {
-      wake.current = await navigator.wakeLock?.request("screen");
-    } catch {}
+    if (!preview.current) {
+      document.documentElement.requestFullscreen?.().catch(() => {});
+      try {
+        wake.current = await navigator.wakeLock?.request("screen");
+      } catch {}
+    }
     const r: Reel = await fetch("/api/reel/build", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -80,6 +86,7 @@ export default function ElderScreen() {
     setIndex(0);
     setPhase("reel");
     m.startMusic(r.song?.src);
+    if (preview.current) return;
     const sess = await fetch("/api/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -87,6 +94,9 @@ export default function ElderScreen() {
     }).then((x) => x.json());
     session.current = sess.id;
   };
+
+  const beginRef = useRef(begin);
+  beginRef.current = begin;
 
   const post = (body: object) =>
     fetch("/api/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).catch(() => {});
@@ -123,6 +133,14 @@ export default function ElderScreen() {
 
   useEffect(() => {
     if (phase !== "end") return;
+    if (preview.current) {
+      const t = setTimeout(() => {
+        mixer.current?.close();
+        setPhase("begin");
+        setTimeout(() => beginRef.current(), 50);
+      }, 6000);
+      return () => clearTimeout(t);
+    }
     const t = setTimeout(() => mixer.current?.fadeOut(8), 20000);
     return () => clearTimeout(t);
   }, [phase]);
