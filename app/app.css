@@ -1035,3 +1035,350 @@ body:has(.cg) {
   margin: 4px 0 0;
   color: var(--ink-soft);
 }
+
+/* ================================================================
+   Signboard skin for the family app and caregiver page.
+   Same layout and tap targets as above; painted surfaces, ink
+   borders, hard shadows and poster lettering on top.
+   ================================================================ */
+
+body:has(.fa),
+body:has(.cg) {
+  background: var(--s-paper);
+}
+.fa,
+.cg {
+  background: var(--s-paper);
+  color: var(--s-ink);
+}
+
+/* Lettering */
+.fa-hello h1,
+.fa-h,
+.fa-step h2,
+.fa-done h2,
+.fa-empty h3,
+.fa-greet-hi,
+.cg-top h1,
+.cg-now b,
+.cg-modes b {
+  font-family: var(--poster);
+  font-weight: 400;
+  color: var(--s-ink);
+}
+.fa-deva,
+.fa-greet-hi .fa-deva {
+  font-family: var(--poster);
+  color: var(--s-sindoor);
+}
+.fa-prompt-say {
+  font-family: var(--poster);
+}
+
+/* Header */
+.fa-top {
+  background: var(--s-ink);
+  border-bottom: 4px solid var(--s-marigold);
+  backdrop-filter: none;
+}
+.fa-top .fa-deva {
+  color: var(--s-marigold);
+  font-size: 28px;
+}
+.fa-brand {
+  color: #d9cdb6;
+  font-family: var(--painted);
+}
+.fa-me {
+  color: var(--s-paper);
+  font-family: var(--painted);
+}
+.fa-initial {
+  background: var(--s-marigold);
+  color: var(--s-ink);
+  border: 2px solid var(--s-paper);
+  font-family: var(--poster);
+}
+.fa-initial-lg {
+  border-color: var(--s-ink);
+}
+.fa-people li:nth-child(2) .fa-initial-lg {
+  background: var(--s-peacock);
+  color: var(--s-haldi);
+}
+.fa-people li:nth-child(3) .fa-initial-lg {
+  background: var(--s-rani);
+  color: var(--s-paper);
+}
+
+/* Painted surfaces */
+.fa-card,
+.fa-who,
+.fa-list li,
+.fa-inbox li,
+.fa-people button,
+.fa-seg,
+.cg-panel,
+.fa-preview {
+  border: 3px solid var(--s-ink);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 var(--s-ink);
+}
+.fa-people button:hover {
+  border-color: var(--s-ink);
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--s-ink);
+}
+.fa-people button {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.fa-prompt {
+  background: var(--s-haldi);
+  border: 3px solid var(--s-ink);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 var(--s-sindoor);
+}
+.fa-prompt ul {
+  color: #3a2208;
+}
+.fa-drop {
+  background: var(--s-haldi);
+  border: 3px dashed var(--s-ink);
+  border-radius: 0;
+}
+.fa-drop:hover,
+.fa-drop:focus-within {
+  background: var(--s-marigold);
+}
+.fa-drop-plus {
+  font-family: var(--poster);
+  color: var(--s-sindoor);
+  font-size: 80px;
+}
+.fa-drop b {
+  font-family: var(--poster);
+  font-weight: 400;
+  font-size: 28px;
+}
+.fa-drop small {
+  color: #3a2208;
+}
+.fa-photo {
+  border: 3px solid var(--s-ink);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 var(--s-ink);
+}
+.fa-grid img {
+  border: 2px solid var(--s-ink);
+  border-radius: 0;
+}
+.fa-inbox img,
+.fa-inbox-dot,
+.fa-toast img {
+  border-radius: 0;
+  border: 2px solid var(--s-ink);
+}
+.fa-inbox li.is-new {
+  border-color: var(--s-ink);
+  background: #e2f1df;
+  box-shadow: 5px 5px 0 var(--s-leaf);
+}
+
+/* Buttons */
+.fa-btn {
+  border: 3px solid var(--s-ink);
+  border-radius: 0;
+  background: var(--s-ink);
+  color: var(--s-haldi);
+  font-family: var(--painted);
+  font-weight: 400;
+  font-size: 19px;
+  box-shadow: 5px 5px 0 var(--s-sindoor);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.fa-btn:not(:disabled):active {
+  transform: translate(4px, 4px);
+  box-shadow: 1px 1px 0 var(--s-sindoor);
+}
+.fa-btn-line {
+  background: var(--white);
+  color: var(--s-ink);
+  box-shadow: 5px 5px 0 var(--s-ink);
+}
+.fa-btn-line:not(:disabled):active {
+  box-shadow: 1px 1px 0 var(--s-ink);
+}
+.fa-link {
+  font-family: var(--painted);
+  text-decoration-color: var(--s-sindoor);
+  text-decoration-thickness: 2px;
+}
+
+/* Inputs and choices */
+.fa-field input,
+.fa-field select,
+.fa-field textarea,
+.fa-inline input {
+  border: 2px solid var(--s-ink);
+  border-radius: 0;
+}
+.fa-check input {
+  accent-color: var(--s-sindoor);
+}
+.fa-chips button,
+.cg-moods button,
+.cg-modes button,
+.cg-stepper button {
+  border: 2px solid var(--s-ink);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 var(--s-ink);
+}
+.fa-chips button.is-on,
+.cg-moods button.is-on {
+  background: var(--s-marigold);
+  color: var(--s-ink);
+  border-color: var(--s-ink);
+}
+.fa-seg button.is-on {
+  background: var(--s-peacock);
+  color: var(--s-haldi);
+}
+.fa-seg button + button {
+  border-left: 2px solid var(--s-ink);
+}
+
+/* Recorder */
+.fa-rec {
+  border: 4px solid var(--s-ink);
+  box-shadow: 6px 6px 0 var(--s-ink);
+  background: var(--s-haldi);
+}
+.fa-rec span {
+  background: var(--s-sindoor);
+}
+
+/* Bottom tabs: a strip of plaques */
+.fa-tabs {
+  background: var(--s-ink);
+  border-top: 4px solid var(--s-marigold);
+  gap: 6px;
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+}
+.fa-tabs button {
+  color: #d9cdb6;
+  font-family: var(--painted);
+  font-weight: 400;
+  min-height: 54px;
+}
+.fa-tabs button.is-on {
+  background: var(--s-marigold);
+  color: var(--s-ink);
+  font-weight: 400;
+  box-shadow: 3px 3px 0 var(--s-paper);
+}
+.fa-tabs button.is-on::before {
+  display: none;
+}
+.fa-count {
+  background: var(--s-rani);
+  border-radius: 0;
+  border: 1px solid var(--s-paper);
+}
+
+/* Toast */
+.fa-toast {
+  border: 3px solid var(--s-marigold);
+  border-radius: 0;
+  box-shadow: 6px 6px 0 var(--s-sindoor);
+}
+.fa-toast b {
+  font-family: var(--poster);
+  font-weight: 400;
+  font-size: 20px;
+}
+
+/* Caregiver */
+.cg-top {
+  margin: 16px 0 22px;
+  padding: 18px 20px;
+  background: var(--s-sindoor);
+  border: 3px solid var(--s-ink);
+  box-shadow: 6px 6px 0 var(--s-ink);
+  align-items: center;
+}
+.cg-top h1 {
+  color: var(--s-paper);
+  font-size: 34px;
+}
+.cg-top p {
+  color: var(--s-paper);
+  font-family: var(--painted);
+}
+.cg-panel h2 {
+  display: inline-block;
+  font-family: var(--painted);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--s-haldi);
+  background: var(--s-ink);
+  padding: 4px 10px 2px;
+  transform: rotate(-1deg);
+}
+.cg-now img {
+  border: 2px solid var(--s-ink);
+  border-radius: 0;
+}
+.cg-smile {
+  background: var(--s-leaf);
+  color: var(--s-paper);
+  font-family: var(--poster);
+  font-size: 46px;
+  border: 3px solid var(--s-ink);
+  border-radius: 0;
+  box-shadow: 8px 8px 0 var(--s-ink);
+}
+.cg-smile:not(:disabled):active {
+  transform: translate(5px, 5px);
+  box-shadow: 3px 3px 0 var(--s-ink);
+}
+.cg-smile.is-sent {
+  background: var(--s-peacock);
+}
+.cg-smile small {
+  color: #e6f0e4;
+}
+.cg-moment button {
+  font-family: var(--painted);
+  font-weight: 400;
+}
+.cg-moment button.is-on {
+  background: var(--s-ink);
+  color: var(--s-haldi);
+  border-radius: 0;
+}
+.cg-modes button.is-on {
+  background: var(--s-haldi);
+  border-color: var(--s-ink);
+  box-shadow: inset 6px 0 0 var(--s-sindoor), 3px 3px 0 var(--s-ink);
+}
+.cg-insight {
+  border: 3px solid var(--s-ink);
+  border-radius: 0;
+  background: var(--s-haldi);
+}
+.cg-insight.is-calm {
+  border-color: var(--s-ink);
+  background: #cfe8cb;
+}
+.cg-links a {
+  color: var(--s-ink);
+  text-decoration-color: var(--s-sindoor);
+  text-decoration-thickness: 2px;
+}
+.fa-tabs button {
+  font-size: 15px;
+  white-space: nowrap;
+}
+.cg-top h1 {
+  line-height: 1.05;
+}
